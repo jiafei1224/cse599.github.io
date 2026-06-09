@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Can a Robot Foundation Model Learn to Scoop Powder Like a Scientist?</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #f9f7f4;
+      color: #1a1a1a;
+      line-height: 1.75;
+    }
+
+    /* ── Banner ── */
+    .banner {
+      width: 100%;
+      max-height: 420px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid #e5e0d8;
+      padding: 48px 24px 40px;
+      text-align: center;
+    }
+    header .tag {
+      display: inline-block;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #e05a2b;
+      margin-bottom: 16px;
+    }
+    header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      max-width: 760px;
+      margin: 0 auto 20px;
+    }
+    header .subtitle {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 1.05rem;
+      color: #555;
+      max-width: 620px;
+      margin: 0 auto 28px;
+    }
+    header .authors {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.95rem;
+      color: #444;
+      margin-bottom: 12px;
+    }
+    header .meta {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.82rem;
+      color: #999;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    /* ── Prose ── */
+    p {
+      margin-bottom: 1.4em;
+      font-size: 1.05rem;
+    }
+
+    h2 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 2.4em 0 0.6em;
+      color: #111;
+    }
+
+    ul {
+      margin: 0 0 1.4em 1.4em;
+    }
+    ul li {
+      font-size: 1.05rem;
+      margin-bottom: 0.5em;
+    }
+
+    strong { font-weight: 700; }
+
+    /* ── Figure ── */
+    figure {
+      margin: 2em 0;
+      text-align: center;
+    }
+    figure img {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+    }
+    figure video {
+      width: 100%;
+      border-radius: 8px;
+      display: block;
+    }
+    figcaption {
+      margin-top: 10px;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.85rem;
+      color: #666;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+    figcaption strong { color: #444; }
+
+    /* ── Pull quote ── */
+    blockquote {
+      border-left: 4px solid #e05a2b;
+      margin: 2em 0;
+      padding: 0.6em 0 0.6em 1.4em;
+      font-size: 1.15rem;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* ── Takeaway box ── */
+    .takeaway {
+      background: #fff8f4;
+      border: 1px solid #f4c9af;
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin: 2.4em 0;
+    }
+    .takeaway h3 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #e05a2b;
+      margin-bottom: 10px;
+    }
+    .takeaway p {
+      margin: 0;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 0.8rem;
+      color: #aaa;
+      padding: 40px 24px;
+      border-top: 1px solid #e5e0d8;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e5e0d8;
+      margin: 2.4em 0;
+    }
+  </style>
+</head>
+<body>
+
+<img class="banner" src="images/banner.png" alt="Robot arm in a materials science lab" />
+
+<header>
+  <div class="tag">CSE 599 &nbsp;·&nbsp; Final Project</div>
+  <h1>Can a Robot Foundation Model Learn to Scoop Powder Like a Scientist?</h1>
+  <p class="authors">Jiafei Duan &amp; Kuotian Liao</p>
+  <div class="meta">University of Washington &nbsp;·&nbsp; 2026</div>
+</header>
+
+<div class="container">
+
+  <h2>Giving AI a body</h2>
+  <p>
+    Most of the excitement around AI lives on a screen: chatbots, image generators, code assistants. But a lot of the work that actually moves science forward happens with <em>hands</em> — weighing reagents, transferring powders, setting up reactions. Drug discovery and materials discovery both depend on thousands of these small physical operations.
+  </p>
+  <p>
+    The dream behind robotics foundation models is simple to state and hard to deliver: give AI access to the physical world so it can do this work itself. For our final project, we wanted to test how close that dream is for a task that sounds trivial but is notoriously hard to automate — <strong>measuring out a small, precise amount of fine powder</strong>.
+  </p>
+
+  <figure>
+    <img src="images/fig1-balance.png" alt="Human hand dosing powder on an analytical balance" />
+    <figcaption>
+      <strong>Figure 1.</strong> Measuring a precise dose of fine powder on an analytical balance — a routine task for a trained hand, and one of the hardest things to hand off to a robot.
+    </figcaption>
+  </figure>
+
+  <h2>Why lab robots haven't taken over yet</h2>
+  <p>
+    Lab automation isn't new. Walk into a well-funded lab and you'll find robotic arms pipetting samples all day. But today's systems share a set of limitations:
+  </p>
+  <ul>
+    <li>They're <strong>pre-programmed for fixed tasks in fixed environments</strong>, so they don't generalize to anything new.</li>
+    <li>They're usually <strong>contained systems</strong> — the workspace is defined by the machine's own footprint and is hard to expand.</li>
+    <li>They mostly handle <strong>liquids</strong>, not solids.</li>
+    <li>They tend to be <strong>proprietary and expensive</strong>, and they often force you to redesign your entire workflow around specialized (or vendor-locked) tools.</li>
+  </ul>
+  <p>
+    In other words, the robot bends the lab to fit the machine, not the other way around. We wanted to flip that.
+  </p>
+
+  <figure>
+    <img src="images/fig2-lab-automation.png" alt="Today's lab automation systems: MultiDose and enclosed workstations" />
+    <figcaption>
+      <strong>Figure 2.</strong> Today's lab automation systems: capable, but contained. Each is a self-enclosed workspace built around its own hardware — reliable for the tasks it was designed for, but hard to expand and mostly limited to liquid handling.
+    </figcaption>
+  </figure>
+
+  <h2>A different kind of autonomy</h2>
+  <p>
+    The shift we're interested in moves away from custom-built robots that need expert pre-programming for domain-specific tasks, and toward <strong>general-purpose robot hardware driven by robotics foundation models</strong> — large multimodal models that take in vision, language, and robot state, reason about the scene, and output actions. The promise is general-purpose behavior in messy, unstructured environments, without writing a new program for every task.
+  </p>
+  <p>
+    The model we built on is <strong>MolmoAct2</strong><sup><a href="#ref-molmoact2">[1]</a></sup>, an open-science robotics foundation model from Ai2. A few things make it a strong starting point:
+  </p>
+  <ul>
+    <li>It's <strong>fully open</strong> — models, code, data, and evaluation are all released.</li>
+    <li>It was trained on roughly <strong>720 hours of high-quality real-world robot data</strong> (compared to about 22 hours for the original MolmoAct), plus over a thousand community datasets scraped and filtered from Hugging Face.</li>
+    <li>It's an <strong>action reasoning model</strong>: rather than mapping pixels straight to motor commands, it reasons about the scene and even predicts depth before acting, which helps it adapt to tasks and robot bodies it hasn't seen before.</li>
+  </ul>
+  <p>
+    People had already shown MolmoAct2 working out-of-the-box on unseen objects and environments. Our question was narrower and more demanding: could it <em>learn</em> a high-precision lab skill?
+  </p>
+
+  <figure>
+    <video autoplay muted loop playsinline>
+      <source src="images/fig3-molmoact2.mp4" type="video/mp4" />
+    </video>
+    <figcaption>
+      <strong>Figure 3.</strong> MolmoAct2 trained on a diverse, large-scale collection of real-world robot demonstrations.
+    </figcaption>
+  </figure>
+
+  <h2>The task: dosing powder for sustainable materials</h2>
+  <p>
+    Our application comes from algae- and biomass-based sustainable materials research, where solid powders are a routine ingredient. Solid powder dosing shows up across many research domains and is one of the hardest things to automate, because <strong>powder behaves unpredictably</strong>: it clumps, it scatters, it sticks.
+  </p>
+  <p>
+    Our goal was deliberately practical: automate powder dosing <em>inside an existing lab, using existing workflows</em>, without significantly altering either one. No custom dispenser hardware, no special digital scale, no redesigned molds — just a general robot learning to do what a person does.
+  </p>
+
+  <figure>
+    <img src="images/fig4-sustainable-materials.png" alt="Algae and plant-based sustainable materials research" />
+    <figcaption>
+      <strong>Figure 4.</strong> The application domain: plant- and algae-based sustainable materials, where precise powder dosing is a routine but critical step in the research workflow.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="images/fig-dispenser.png" alt="Exploded and assembled views of a custom powder dispenser mechanism" />
+    <figcaption>
+      <strong>Figure 4b.</strong> The "state-of-the-art" automated powder dispenser: a dedicated motion platform with custom hardware, special molds, and a scale wired for digital communication. Reliable and accurate — but a fully custom workflow we intentionally did not use.
+    </figcaption>
+  </figure>
+
+  <p>
+    For reference, the "state-of-the-art" automated approach uses a dedicated motion platform<sup><a href="#ref-jubilee">[2]</a></sup> with a custom powder dispenser, special molds, and a scale wired for digital communication. It's reliable and accurate, but it relies on a fundamentally different mechanism than a human and a fully custom workflow. We intentionally did not use it.
+  </p>
+
+  <hr />
+
+  <h2>Benchmarking models against the human baseline</h2>
+  <p>
+    We collected a human baseline first: an operator measured a <strong>1.5 g target</strong> across 15 trials, with no removing or re-attempting. The results landed in a tight band, mostly within a few hundredths of a gram of target — a reminder of how good trained humans are at this. That band is the bar each model has to clear.
+  </p>
+  <p>To keep the comparison fair, every model ran through the same protocol:</p>
+  <ul>
+    <li>Collected <strong>50 demonstrations</strong> of measuring 1.5 g of powder.</li>
+    <li>LoRA fine-tuned the model for <strong>100k steps</strong>.</li>
+    <li>Evaluated on <strong>15 trials</strong>, mirroring the human protocol.</li>
+  </ul>
+
+  <h2>Results: MolmoAct2</h2>
+  <p>
+    The model did learn the task. Some trials were excellent — one hit <strong>1.51 g</strong>, essentially on target. But the spread was much wider than the human baseline, ranging from about <strong>0.96 g</strong> on a light pour to <strong>1.76 g</strong> on a heavy one.
+  </p>
+  <p>
+    The robot could clearly do the motion; what it lacked was the consistent fine control that keeps every trial close to target.
+  </p>
+
+  <figure>
+    <div style="display:flex; gap:12px;">
+      <video style="flex:1; min-width:0; border-radius:8px;" autoplay muted loop playsinline>
+        <source src="images/176 (1).MP4" type="video/mp4" />
+      </video>
+      <video style="flex:1; min-width:0; border-radius:8px;" autoplay muted loop playsinline>
+        <source src="images/20260526_163812_10x (1).mp4" type="video/mp4" />
+      </video>
+    </div>
+    <figcaption>
+      <strong>Figure 5a.</strong> Side-by-side comparison: human operator (left) vs. MolmoAct2 (right) performing the powder dosing task.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="images/human_vs_molmoact2.png" alt="Scatter plots comparing human vs MolmoAct2 powder dosing accuracy" />
+    <figcaption>
+      <strong>Figure 5b.</strong> Human (green) vs. MolmoAct2 (blue) across 15 trials each. The human results cluster tightly around the 1.5 g target (dashed line); the model's spread is noticeably wider.
+    </figcaption>
+  </figure>
+
+  <hr />
+
+  <h2>What we learned (and what's still hard)</h2>
+  <p>
+    The honest takeaway is encouraging but sober: a general, open robotics foundation model can be fine-tuned to attempt a delicate lab task with only 50 demonstrations and no custom hardware — but it doesn't yet match a trained human's precision. The gap is mostly about <strong>variance</strong>, and that variance traces back to a few real bottlenecks:
+  </p>
+  <ul>
+    <li><strong>Training data is hard to generate.</strong> You first have to perform the motion under human teleoperation, which is itself very difficult for fine-motor tasks.</li>
+    <li><strong>There's no good end effector.</strong> A one-DOF gripper simply can't reproduce the finger-tapping subtlety that makes human dosing precise.</li>
+    <li><strong>Fine motor movement is hard to imitate</strong> without either better hardware or far more training data.</li>
+    <li><strong>Language and vision models struggle with exact joint movements.</strong> A VLM can interpret what a human is doing, but translating that into the precise joint trajectories behind each motion is still an open problem — an area that recent work on imitating human motion via analogical reasoning is starting to tackle.</li>
+  </ul>
+
+  <hr />
+
+  <h2>References</h2>
+  <ol style="font-size:0.9rem; line-height:1.6; padding-left:1.4em;">
+    <li id="ref-molmoact2">
+      Fang, Haoquan, Jiafei Duan, Donovan Clay, Sam Wang, Shuo Liu, Weikai Huang, Xiang Fan et al. <em>MolmoAct2: Action Reasoning Models for Real-world Deployment.</em> arXiv preprint arXiv:2605.02881 (2026).
+      <a href="https://arxiv.org/html/2605.02881v1" target="_blank" rel="noopener">arxiv.org/abs/2605.02881</a>
+    </li>
+    <li id="ref-jubilee">
+      Machine Agency, <em>Science Jubilee: Building a Jubilee</em>.
+      <a href="https://science-jubilee.readthedocs.io/en/latest/building/building_a_jubilee.html" target="_blank" rel="noopener">science-jubilee.readthedocs.io</a>
+    </li>
+  </ol>
+
+</div>
+
+<footer>
+  CSE 599 Final Project &nbsp;·&nbsp; University of Washington &nbsp;·&nbsp; 2026
+</footer>
+
+</body>
+</html>
